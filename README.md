@@ -1,85 +1,227 @@
-# 🩺 TP — Calculateur d'IMC (Partie B : Base de données & PHP/PDO)
-**ISTMT · Université de Tunis El Manar** — *Dr Marwa Ben Ammar*
+# 🩺 TP — Calculateur d'IMC
 
-Bienvenue dans l'équipe technique du centre de nutrition ! Votre mission : connecter l'interface Web existante à une base de données MySQL pour sauvegarder et sécuriser l'historique des patients.
+## Partie B : Base de données & PHP/PDO
 
----
-
-## 🚀 Mise en route (5 min)
-- [ ] Cliquer sur **Use this template** > **Create a new repository** (nommez-le `tp-imc-votreNom`).
-- [ ] Cloner votre dépôt dans le dossier `C:\xampp\htdocs\`.
-- [ ] Démarrer **Apache** et **MySQL** dans le panneau de contrôle XAMPP.
-- [ ] Tester l'affichage sur `http://localhost/tp-imc-votreNom/index.php`.
+**ISTMT · Université de Tunis El Manar**  
+**Enseignante : Dr Marwa Ben Ammar**
 
 ---
 
-## 🏁 Sprint 1 : Base de données & SQL (30 min)
+## 🎯 Présentation du TP
+
+Bienvenue dans l'équipe technique du centre de nutrition !
+
+Votre mission consiste à connecter une interface Web existante à une base de données MySQL afin de sauvegarder, consulter et sécuriser l'historique des mesures des patients.
+
+Ce TP vous permettra de mettre en pratique les notions de développement Web côté serveur, de bases de données relationnelles et de gestion de versions avec Git et GitHub.
+
+### Objectifs pédagogiques
+
+À la fin de ce TP, vous serez capables de :
+
+- Concevoir et manipuler une base de données relationnelle avec MySQL.
+- Écrire des requêtes SQL (`INSERT`, `SELECT`, `JOIN`, fonctions d'agrégation).
+- Établir une connexion entre PHP et MySQL avec PDO.
+- Développer des fonctionnalités CRUD.
+- Appliquer des mécanismes de sécurité contre les injections SQL et les attaques XSS.
+- Utiliser Git et GitHub pour gérer les versions d'un projet informatique.
+- Enregistrer et partager les modifications avec les commandes Git.
+
+### Technologies et outils utilisés
+
+- HTML5, CSS3 et JavaScript.
+- PHP et PDO.
+- MySQL et phpMyAdmin.
+- Git et GitHub.
+- Visual Studio Code.
+- XAMPP.
+
+---
+
+# 🚀 Mise en route (5 min)
+
+## Étape 1 — Récupération du projet avec GitHub
+
+Chaque étudiant doit disposer de son propre compte GitHub.
+
+1. Accéder au repository fourni par l'enseignante.
+2. Cliquer sur **Fork** pour créer une copie personnelle du projet sur son compte GitHub.
+3. Vérifier que le repository a bien été créé dans son propre compte.
+
+## Étape 2 — Préparation de l'environnement local
+
+1. Installer Git si nécessaire : [https://git-scm.com/](https://git-scm.com/)
+2. Installer XAMPP et Visual Studio Code si nécessaire.
+3. Ouvrir Git Bash ou le terminal de VS Code.
+4. Se déplacer dans le dossier `C:\xampp\htdocs\` :
+
+```bash
+cd C:/xampp/htdocs
+```
+
+5. Cloner son propre repository GitHub (et non celui de l'enseignante) :
+
+```bash
+git clone https://github.com/VOTRE-NOM-GITHUB/tp-imc-starter.git
+```
+
+6. Accéder au dossier du projet :
+
+```bash
+cd tp-imc-starter
+```
+
+7. Ouvrir le projet dans Visual Studio Code :
+
+```bash
+code .
+```
+
+## Étape 3 — Lancement de l'application
+
+- Démarrer **Apache** et **MySQL** depuis le panneau de contrôle XAMPP.
+- Ouvrir le navigateur Web.
+- Tester l'application à l'adresse :
+
+`http://localhost/tp-imc-starter/index.php`
+
+**Important :** chaque étudiant travaille sur sa propre copie locale et son propre repository GitHub. Les modifications seront enregistrées progressivement avec Git.
+
+---
+
+# 🏁 Sprint 1 : Base de données & SQL (30 min)
 
 ### Exercice 5 — Concevoir la base avec phpMyAdmin
 
-> **Objectif :** concevoir et créer une base de données relationnelle (2 tables, clé primaire, clé étrangère).
+**Objectif :** concevoir et créer une base de données relationnelle comportant deux tables, une clé primaire et une clé étrangère.
 
 #### Travail demandé
 
-- [ ] **1.** Dans **phpMyAdmin** (`http://localhost/phpmyadmin`), créez la base `imc_db` avec l'interclassement `utf8mb4_general_ci`.
+- [ ] **1.** Dans phpMyAdmin (`http://localhost/phpmyadmin`), créez la base `imc_db` avec l'interclassement `utf8mb4_general_ci`.
 
-- [ ] **2.** Créez la table `personne` :
+- [ ] **2.** Créez la table `personnes` :
 
-| Champ | Type | Contraintes |
-| :--- | :--- | :--- |
-| `id` | `INT` | Clé primaire, auto-incrément |
-| `nom` | `VARCHAR(50)` | `NOT NULL` |
-| `prenom` | `VARCHAR(50)` | `NOT NULL` |
+| Champ    | Type          | Contraintes                  |
+| -------- | ------------- | ---------------------------- |
+| `id`     | `INT`         | Clé primaire, auto-incrément |
+| `nom`    | `VARCHAR(50)` | `NOT NULL`                   |
+| `prenom` | `VARCHAR(50)` | `NOT NULL`                   |
 
-- [ ] **3.** Créez la table `mesure` (moteur **InnoDB**) :
+- [ ] **3.** Créez la table `mesures` (moteur InnoDB) :
 
-| Champ | Type | Contraintes |
-| :--- | :--- | :--- |
-| `id` | `INT` | Clé primaire, auto-incrément |
-| `personne_id` | `INT` | `NOT NULL`, clé étrangère vers `personne(id)` |
-| `poids` | `DECIMAL(5,1)` | `NOT NULL` |
-| `taille` | `DECIMAL(3,2)` | `NOT NULL` |
-| `imc` | `DECIMAL(4,1)` | `NOT NULL` |
-| `categorie` | `VARCHAR(20)` | `NOT NULL` |
-| `date_mesure` | `DATETIME` | Valeur par défaut : date et heure courantes (`CURRENT_TIMESTAMP`) |
+| Champ         | Type           | Contraintes                                    |
+| ------------- | -------------- | ---------------------------------------------- |
+| `id`          | `INT`          | Clé primaire, auto-incrément                   |
+| `personne_id` | `INT`          | `NOT NULL`, clé étrangère vers `personnes(id)` |
+| `poids`       | `DECIMAL(5,1)` | `NOT NULL`                                     |
+| `taille`      | `DECIMAL(3,2)` | `NOT NULL`                                     |
+| `imc`         | `DECIMAL(4,1)` | `NOT NULL`                                     |
+| `categorie`   | `VARCHAR(20)`  | `NOT NULL`                                     |
+| `date_mesure` | `DATETIME`     | Valeur par défaut : `CURRENT_TIMESTAMP`        |
 
-- [ ] **4.** Définissez la clé étrangère `mesure.personne_id → personne.id` (onglet **« Vue relationnelle »**) avec l'action `ON DELETE CASCADE`, puis ouvrez le **« Concepteur »** pour vérifier le schéma.
+- [ ] **4.** Définissez la clé étrangère `mesures.personne_id → personnes.id` (onglet « Vue relationnelle ») avec l'action `ON DELETE CASCADE`, puis ouvrez le « Concepteur » pour vérifier le schéma.
 
 - [ ] **5.** Insérez les données de test ci-dessous, puis exportez la structure et les données dans le fichier `imc_db.sql` à la racine du projet.
 
 #### Données à insérer
 
-| Table | Valeurs |
-| :--- | :--- |
-| `personne` | `('Ben Salah', 'Amine')` ; `('Trabelsi', 'Sana')` ; `('Gharbi', 'Youssef')` |
-| `mesure` | **Personne 1 :** `72.5` kg, `1.75` m, `23.7`, `'Normal'`<br>**Personne 1 :** `80.0` kg, `1.75` m, `26.1`, `'Surpoids'`<br>**Personne 2 :** `52.0` kg, `1.68` m, `18.4`, `'Sous-poids'`<br>**Personne 2 :** `58.0` kg, `1.68` m, `20.5`, `'Normal'`<br>**Personne 3 :** `95.0` kg, `1.72` m, `32.1`, `'Obésité'` |
+| Table       | Valeurs                                                                     |
+| ----------- | --------------------------------------------------------------------------- |
+| `personnes` | `('Ben Salah', 'Amine')` ; `('Trabelsi', 'Sana')` ; `('Gharbi', 'Youssef')` |
+| `mesures`   | Personne 1 : `72.5` kg, `1.75` m, `23.7`, `'Normal'`                        |
+|             | Personne 1 : `80.0` kg, `1.75` m, `26.1`, `'Surpoids'`                      |
+|             | Personne 2 : `52.0` kg, `1.68` m, `18.4`, `'Sous-poids'`                    |
+|             | Personne 2 : `58.0` kg, `1.68` m, `20.5`, `'Normal'`                        |
+|             | Personne 3 : `95.0` kg, `1.72` m, `32.1`, `'Obésité'`                       |
+
+### 💻 Initiation à Git — Premier enregistrement
+
+Après la création de la base de données et du fichier `imc_db.sql`, enregistrez votre travail sur GitHub.
+
+Dans le terminal de VS Code, exécutez :
+
+```bash
+git status
+git add .
+git commit -m "feat: creation base et structure SQL"
+git push
+```
+
+**À retenir :**
+
+- `git status` : vérifier les fichiers modifiés.
+- `git add .` : préparer les modifications.
+- `git commit` : enregistrer une nouvelle version localement.
+- `git push` : envoyer les modifications vers votre repository GitHub.
 
 ---
+
+# 🔌 Sprint 2 : Connexion PHP / PDO (40 min)
 
 ### Exercice 6 — Requêtes SQL (`requetes.sql`)
-- [ ] Écrire et tester la requête d'**insertion** d'une mesure dans `requetes.sql`.
-- [ ] Écrire et tester la requête de **jointure** (historique trié du plus récent au plus ancien).
-- [ ] Écrire et tester la requête d'**agrégation** (nombre de mesures et IMC moyen par patient).
-- [ ] **Git Push #1 :** `git add . && git commit -m "feat: creation base et requetes SQL" && git push`
 
----
+**Objectif :** écrire, tester et sauvegarder les requêtes SQL qui seront ensuite intégrées dans l'application PHP.
 
-## 🔌 Sprint 2 : Connexion PHP / PDO (40 min)
+> **Consigne :** Testez d'abord chaque requête dans l'onglet **SQL** de phpMyAdmin sur la base `imc_db`, puis copiez-les dans le fichier `requetes.sql` à la racine du projet en les séparant par des commentaires (`-- Requête 1...`).
+
+#### Travail demandé
+
+- [ ] **1. Requête d'insertion (`INSERT INTO`) :**
+  - Insérer une nouvelle mesure dans la table `mesures` pour le patient ayant `personne_id = 1` (ex. : poids `75.0` kg, taille `1.75` m, IMC `24.5`, catégorie `'Normal'`).
+  - *Note : Ne renseignez pas `id` ni `date_mesure` (ils se remplissent automatiquement).*
+
+- [ ] **2. Requête de jointure (`SELECT ... JOIN`) :**
+  - Récupérer l'historique complet des mesures en affichant les colonnes suivantes : `mesures.id`, `personnes.nom`, `personnes.prenom`, `mesures.poids`, `mesures.taille`, `mesures.imc`, `mesures.categorie` et `mesures.date_mesure`.
+  - Lier les tables `mesures` et `personnes` via la clé étrangère (`mesures.personne_id = personnes.id`).
+  - Trier les résultats de la mesure la plus récente à la plus ancienne (`ORDER BY date_mesure DESC`).
+
+- [ ] **3. Requête d'agrégation (`GROUP BY`, `COUNT`, `AVG`) :**
+  - Afficher pour chaque patient : son `nom`, son `prenom`, le **nombre total de mesures** enregistrées et son **IMC moyen** (arrondi à 1 décimale avec `ROUND(..., 1)`).
+  - Regrouper les résultats par patient (`GROUP BY personnes.id`).
 
 ### Exercice 7 — Rendre l'application dynamique
+
+**Objectif :** connecter l'application Web à la base MySQL en utilisant PHP et PDO.
+
+#### Travail demandé
+
 - [ ] Compléter `connexion.php` pour établir la connexion PDO à `imc_db`.
-- [ ] Compléter `index.php` pour charger les patients dans le `<select>` et afficher l'historique dans le `<table>`.
-- [ ] Compléter `ajouter.php` pour calculer l'IMC côté serveur, insérer la mesure et rediriger vers `index.php`.
+- [ ] Compléter `index.php` pour charger les patients depuis la table `personnes` dans le `<select>` et afficher l'historique dans le `<table>`.
+- [ ] Compléter `ajouter.php` pour calculer l'IMC côté serveur, insérer la mesure dans `mesures` et rediriger vers `index.php`.
 - [ ] Compléter `supprimer.php` pour supprimer une mesure via son `id` et rediriger vers `index.php`.
-- [ ] **Git Push #2 :** `git add . && git commit -m "feat: CRUD complet PHP PDO" && git push`
+
+### 💻 Git — Deuxième enregistrement
+
+Après avoir testé les fonctionnalités PHP/PDO :
+
+```bash
+git status
+git add .
+git commit -m "feat: CRUD complet PHP PDO"
+git push
+```
+
+Vérifiez sur votre compte GitHub que les dernières modifications ont bien été envoyées.
 
 ---
 
-## 🛡️ Sprint 3 : Défi Sécurité « Hack & Fix » (20 min)
+# 🛡️ Sprint 3 : Défi Sécurité « Hack & Fix » (20 min)
 
 ### Exercice 8 — Blindage de l'application
-- [ ] **Test XSS :** Insérer un patient nommé `<script>alert('Piraté !')</script>` dans phpMyAdmin et recharger `index.php`.
+
+**Objectif :** identifier et corriger quelques vulnérabilités courantes dans une application Web.
+
+#### Travail demandé
+
+- [ ] **Test XSS :** Insérer un patient nommé `<script>alert('Piraté !')</script>` dans la table `personnes` via phpMyAdmin et recharger `index.php`.
 - [ ] **Fix XSS :** Protéger tous les affichages dans `index.php` avec `htmlspecialchars()`.
 - [ ] **Fix SQLi :** Vérifier que `ajouter.php` et `supprimer.php` utilisent uniquement des requêtes préparées (`prepare` / `execute`).
 - [ ] **Validation serveur :** Bloquer dans `ajouter.php` toute valeur hors bornes (`20 <= poids <= 300`, `0.5 <= taille <= 2.5`).
-- [ ] **Livraison finale :** Mettre à jour `imc_db.sql` à la racine du projet et faire le dernier `git push`.
+
+### 💻 Git — Livraison finale
+
+Après avoir terminé les corrections de sécurité :
+
+1. Vérifier les fichiers modifiés avec `git status`.
+2. Enregistrer les modifications avec `git add .` et `git commit -m "fix: securisation XSS SQLi et validation serveur"`.
+3. Envoyer la dernière version sur votre dépôt GitHub avec `git push`.
