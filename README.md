@@ -138,25 +138,6 @@ git push
 
 # Sprint 2 : Connexion PHP / PDO (40 min)
 
-### Exercice 6 — Requêtes SQL (`requetes.sql`)
-
-**Objectif :** écrire, tester et sauvegarder les requêtes SQL qui seront ensuite intégrées dans l'application PHP.
-
-> **Consigne :** Testez d'abord chaque requête dans l'onglet **SQL** de phpMyAdmin sur la base `imc_db`, puis copiez-les dans le fichier `requetes.sql` à la racine du projet en les séparant par des commentaires (`-- Requête 1...`).
-
-#### Travail demandé
-
-- [ ] **1. Requête d'insertion (`INSERT INTO`) :**
-  - Insérer une nouvelle mesure dans la table `mesures` pour le patient ayant `personne_id = 1` (ex. : poids `75.0` kg, taille `1.75` m, IMC `24.5`, catégorie `'Normal'`).
-  - *Note : Ne renseignez pas `id` ni `date_mesure` (ils se remplissent automatiquement).*
-- [ ] **2. Requête de jointure (`SELECT ... JOIN`) :**
-  - Récupérer l'historique complet des mesures en affichant les colonnes suivantes : `mesures.id`, `personnes.nom`, `personnes.prenom`, `mesures.poids`, `mesures.taille`, `mesures.imc`, `mesures.categorie` et `mesures.date_mesure`.
-  - Lier les tables `mesures` et `personnes` via la clé étrangère (`mesures.personne_id = personnes.id`).
-  - Trier les résultats de la mesure la plus récente à la plus ancienne (`ORDER BY date_mesure DESC`).
-- [ ] **3. Requête d'agrégation (`GROUP BY`, `COUNT`, `AVG`) :**
-  - Afficher pour chaque patient : son `nom`, son `prenom`, le **nombre total de mesures** enregistrées et son **IMC moyen** (arrondi à 1 décimale avec `ROUND(..., 1)`).
-  - Regrouper les résultats par patient (`GROUP BY personnes.id`).
-
 ### Exercice 7 — Rendre l'application dynamique
 
 **Objectif :** connecter l'application Web à la base MySQL en utilisant PHP et PDO.
