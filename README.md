@@ -168,14 +168,12 @@ Vérifiez sur votre compte GitHub que les dernières modifications ont bien ét�
 
 ### Exercice 8 — Blindage de l'application
 
-**Objectif :** identifier et corriger quelques vulnérabilités courantes dans une application Web.
+**Objectif :** identifier et corriger une vulnérabilité courante dans une application Web.
 
 #### Travail demandé
 
 - [ ] **Test XSS :** Insérer un patient nommé `<script>alert('Piraté !')</script>` dans la table `personnes` via phpMyAdmin et recharger `index.php`.
 - [ ] **Fix XSS :** Protéger tous les affichages dans `index.php` avec `htmlspecialchars()`.
-- [ ] **Fix SQLi :** Vérifier que `ajouter.php` et `supprimer.php` utilisent uniquement des requêtes préparées (`prepare` / `execute`).
-- [ ] **Validation serveur :** Bloquer dans `ajouter.php` toute valeur hors bornes (`20 <= poids <= 300`, `0.5 <= taille <= 2.5`).
 
 ### Git — Livraison finale
 
