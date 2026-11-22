@@ -37,7 +37,7 @@ $mesures = $pdo->query("
                         <option value="">-- Choisir --</option>
                         <?php foreach ($personnes as $p): ?>
                             <option value="<?= $p['id'] ?>">
-                                <?= htmlspecialchars($p['nom'] . ' ' . $p['prenom']) ?>
+                                <?= htmlspecialchars($p['nom'] . ' ' . $p['prenom']) ?>                            
                             </option>
                         <?php endforeach; ?>
                     </select>
